@@ -54,4 +54,4 @@ class RecommendInput(BaseModel):
 
 @app.post("/recommend")
 async def recommend_size(recommend_input: RecommendInput):
-    return
+    return "hello"
