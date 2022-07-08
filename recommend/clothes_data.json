@@ -1,0 +1,16 @@
+{
+    "product_uuid": "5826d9eb-5f2f-4c88-9138-23da0dcf2321",
+    "seller_uuid": "02710acd-b68b-44e0-ab12-3ef514dc3457",
+    "product_name": "이미지테스트 9",
+    "product_img": [],
+    "product_hashtag": [],
+    "product_price": 0,
+    "product_effective_price": 0,
+    "product_discount_ratio": 0,
+    "product_create_time": "2022-07-07T13:21:33.570Z",
+    "product_state": "ALLOW",
+    "product_detail_state": "NOT_FOUND",
+    "is_delete": false,
+    "important_size" : "neck",
+    "size_margin": 1
+}

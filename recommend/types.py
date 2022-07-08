@@ -1,8 +1,5 @@
-from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
-
-app = FastAPI()
 
 
 class ProductInfo(BaseModel):
@@ -12,9 +9,9 @@ class ProductInfo(BaseModel):
     product_img: List[str]
     product_hashtag: List[str]
     product_price: int
-    product_effective: int
-    product_discount: int
-    product_create_date: str
+    product_effective_price: int
+    product_discount_ratio: int
+    product_create_time: str
 
 
 class ProductDetail(BaseModel):
@@ -50,8 +47,3 @@ class RecommendInput(BaseModel):
     product_info: ProductInfo
     product_details: List[ProductDetail]
     dog_info: DogInfo
-
-
-@app.post("/recommend")
-async def recommend_size(recommend_input: RecommendInput):
-    return "hello"
