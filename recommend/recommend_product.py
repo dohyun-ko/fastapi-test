@@ -1,9 +1,9 @@
 # 현재 가슴, 등, 목 길이 기준으로 코딩
 # 목은 모두 범위 데이터
-from .types import RecommendInput
+from .types import ProductRecommendInput
 from fastapi.encoders import jsonable_encoder
 
-def preprocessing(recommend_input: RecommendInput):
+def preprocessing(recommend_input: ProductRecommendInput):
     dog_data_json = jsonable_encoder(recommend_input.dog_info)
     clothes_data_json = jsonable_encoder(recommend_input.product_info)
     clothes_data_detail_json = jsonable_encoder(recommend_input.product_details)

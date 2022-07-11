@@ -43,7 +43,7 @@ class DogInfo(BaseModel):
     is_delete: bool
 
 
-class RecommendInput(BaseModel):
+class ProductRecommendInput(BaseModel):
     product_info: ProductInfo
     product_details: List[ProductDetail]
     dog_info: DogInfo
