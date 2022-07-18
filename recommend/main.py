@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from .types import ProductRecommendInput, DogInfo
-from .recommend_product import preprocessing
-from .recommend_dog_size import recommend_dog_size
+from input_types import ProductRecommendInput, DogInfo
+from recommend_product import preprocessing
+from recommend_dog_size import recommend_dog_size
 
 app = FastAPI()
 

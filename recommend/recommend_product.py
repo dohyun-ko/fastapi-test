@@ -1,18 +1,12 @@
 # 현재 가슴, 등, 목 길이 기준으로 코딩
 # 목은 모두 범위 데이터
-from .types import ProductRecommendInput
+from input_types import ProductRecommendInput
 from fastapi.encoders import jsonable_encoder
 
 def preprocessing(recommend_input: ProductRecommendInput):
     dog_data_json = jsonable_encoder(recommend_input.dog_info)
     clothes_data_json = jsonable_encoder(recommend_input.product_info)
     clothes_data_detail_json = jsonable_encoder(recommend_input.product_details)
-    #dog_data = open('./dog_data.json', 'r', encoding='utf-8')
-    #dog_data_json = json.load(dog_data)
-    #clothes_data = open('clothes_data.json', 'r', encoding='utf-8')
-    #clothes_data_json = json.load(clothes_data)
-    #clothes_data_detail = open('clothes_data_detail.json', 'r', encoding='utf-8')
-    #clothes_data_detail_json = json.load(clothes_data_detail)
 
     important_size = clothes_data_json.get("important_size") #기준 사이즈
 
@@ -22,6 +16,8 @@ def preprocessing(recommend_input: ProductRecommendInput):
     clothes_data_list = [[0 for _ in range(5)] for _ in range(len(clothes_data_detail_json))]
 
     clothes_data_num = 0
+
+
 
     for i in range(len(clothes_data_list[0])):
         flag = 0
@@ -36,9 +32,12 @@ def preprocessing(recommend_input: ProductRecommendInput):
             clothes_data_list[clothes_data_num][4]=clothes_data_detail_json[i].get("size_leg")
             clothes_data_num += 1
 
+
+
     #오류 필터링
+
     nodata_size = [True for _ in range(len(clothes_data_detail_json))]
-    nodata_part = [True for _ in range(4)]
+    nodata_part = [True for _ in range(4)] #[chest=> back=> neck => leg]
 
     for j in range(len(clothes_data_detail_json)):
         flag = 0
@@ -106,30 +105,44 @@ def preprocessing(recommend_input: ProductRecommendInput):
                     clothes_data_list[flag] = flag_list
                     flag = i
 
-    input = 0
+    error = 0
 
     # emptyc 사이즈 존재
     for i in range(len(clothes_data_detail_json)):
         if nodata_size[i] == False:
-            input = 1
+            error = 1
     # 중요사이즈 없을 경우
-    if important_size == "chest":
-        if nodata_part[0] == False or nodata_part[2] == False or nodata_part[3] == False:
-            input = 1
+    if important_size == "size_chest":
+        if clothes_data_json.get("category") == "하네스":
+            if nodata_part[0] == False:
+                error = 1
 
-    if important_size == "neck":
+        elif clothes_data_json.get("category") == "상의" and clothes_data_json.get("category") == "원피스":
+            if nodata_part[0] == False or nodata_part[2] == False:
+                error = 1
+
+        elif clothes_data_json.get("category") == "하의":
+            if nodata_part[0] == False or nodata_part[3] == False:
+                error = 1
+
+    if important_size == "size_neck":
         if nodata_part[2] == False:
-            input = 1
+            error = 1
 
-    if important_size == "back":
-        if nodata_part[0] == False or nodata_part[1] == False or nodata_part[2] == False or nodata_part[3] == False:
-            input = 1
+    if important_size == "size_back":
+        if nodata_part[1] == False or nodata_part[2] == False:
+            error = 1
 
-    #추천 알고리즘
+    if important_size == "none":
+        error = 1
+
+
+
+#추천 알고리즘
 #def size_recommend(error):
 
-    #if error==1:
-    #    return "none","none"
+    if error==1:
+        return "none","none"
 
     recommend_size = "none" #적당함, 슬림핏
     recommend_size2 = "failed" #오버핏
@@ -156,23 +169,23 @@ def preprocessing(recommend_input: ProductRecommendInput):
     neck_size_count_middle = [0 for _ in range(clothes_data_num)]
 
     for t in range(0, len(size_name)):
-        if important_size == "chest":
+        if important_size == "size_chest":
             if len(chest_size_count_middle) != 0:
                 chest_size_count_middle[t] = chest_size_middle[t] - margin
                 back_size_count_middle[t] = back_size_middle[t]- margin
                 neck_size_count_middle[t] = neck_size_middle[t] - margin *2/3
-        if important_size == "back":
+        if important_size == "size_back":
             if len(back_size_count_middle) != 0:
                 chest_size_count_middle[t] = chest_size_middle[t] - margin
                 back_size_count_middle[t] = back_size_middle[t] - margin
                 neck_size_count_middle[t] = neck_size_middle[t] - margin *2/3
-        if  important_size == "neck":
+        if  important_size == "size_neck":
             if len(neck_size_count_middle) != 0:
                 neck_size_count_middle[t] = neck_size_middle[t] - margin *2/3
 
     # 사이즈 추천 시작
     for i in range(0 , len(size_name)):
-        if important_size == "chest":
+        if important_size == "size_chest":
             neck_ok = [0 for _ in range(clothes_data_num)]
             leg_ok = [0 for _ in range(clothes_data_num)]
 
@@ -221,7 +234,7 @@ def preprocessing(recommend_input: ProductRecommendInput):
                                     if dog_size_chest>=(chest_size_count_middle[k]+chest_size_count_middle[k+1])/2 and dog_size_chest<chest_size_count_middle[k+1]:
                                         recommend_size = size_name[k + 1]
 
-        if important_size == "neck":
+        if important_size == "size_neck":
 
             for k in range(0, len(size_name) - 1):
                 if k == 0:
@@ -253,7 +266,7 @@ def preprocessing(recommend_input: ProductRecommendInput):
                                 recommend_size = size_name[k + 1]
 
 
-        if important_size == "back":
+        if important_size == "size_back":
 
                 chest_ok = [0 for _ in range(clothes_data_num)]
                 neck_ok = [0 for _ in range(clothes_data_num)]
@@ -309,12 +322,13 @@ def preprocessing(recommend_input: ProductRecommendInput):
                                         if dog_size_back >= (back_size_count_middle[k] + back_size_count_middle[k + 1]) / 2 and dog_size_back < back_size_count_middle[k + 1]:
                                             recommend_size = size_name[k + 1]
 
-        return recommend_size , recommend_size2
+        return recommend_size, recommend_size2
 
-############################################################################################################################################################################################
+#################################################################################################################################################################################################
 
 
-#print(size_recommend(input))
+
+#    print(size_recommend(error))
 
 # 결과값 ('XL','failed') => 추천 사이즈 XL
 # 결과값 ('XL','none') => 슬림핏 XL
