@@ -1,4 +1,5 @@
 import math
+import random
 from fastapi.encoders import jsonable_encoder
 
 def recommend_dog_size(dog_info):
@@ -6,16 +7,17 @@ def recommend_dog_size(dog_info):
     breed = dog_info_json.get("dog_type")
     weight = dog_info_json.get("dog_weight")
     old = dog_info_json.get("dog_age")
-    result = size(breed, weight, old, 1, 0)
+    result = size(breed, weight, old)
+
     return {
-        "dog_size_chest": result[0],
-        "dog_size_neck": result[1],
-        "dog_size_back": result[2],
-        "dog_size_leg": result[3]
+        "dog_size_chest": result[0]+random.random()-0.5,
+        "dog_size_neck": result[1]+random.random()-0.5,
+        "dog_size_back": result[2]+random.random()-0.5,
+        "dog_size_leg": result[3]+random.random()-0.5
     }
 
 
-def size(breed,weight,old,size_group,fat):
+def size(breed,weight,old):
 
     breed_list = ['포메라니안', '말티즈', '푸들(토이)', '골든리트리버', '비숑', '치와와', '시츄', '진돗개', '푸들(미디엄미니어처)']
 

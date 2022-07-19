@@ -17,8 +17,6 @@ def preprocessing(recommend_input: ProductRecommendInput):
 
     clothes_data_num = 0
 
-
-
     for i in range(len(clothes_data_list[0])):
         flag = 0
         for j in range(len(clothes_data_detail_json)):
@@ -133,7 +131,7 @@ def preprocessing(recommend_input: ProductRecommendInput):
         if nodata_part[1] == False or nodata_part[2] == False:
             error = 1
 
-    if important_size == "none":
+    if important_size == "size_none":
         error = 1
 
 

@@ -3,15 +3,17 @@ from typing import List
 
 
 class ProductInfo(BaseModel):
-    product_uuid: str
-    seller_uuid: str
-    product_name: str
-    product_img: List[str]
-    product_hashtag: List[str]
-    product_price: int
-    product_effective_price: int
-    product_discount_ratio: int
-    product_create_time: str
+    # product_uuid: str
+    # seller_uuid: str
+    # product_name: str
+    # product_img: List[str]
+    # product_hashtag: List[str]
+    # product_price: int
+    # product_effective_price: int
+    # product_discount_ratio: int
+    # product_create_time: str
+    important_size: str
+    size_margin: float
 
 
 class ProductDetail(BaseModel):
@@ -22,6 +24,7 @@ class ProductDetail(BaseModel):
     product_sales: int
     size_chest: float
     size_back: float
+    size_neck: float
     size_leg: float
     size_margin: float
 
