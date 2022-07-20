@@ -17,7 +17,8 @@ def preprocessing(recommend_input: ProductRecommendInput):
 
     clothes_data_num = 0
 
-    for i in range(len(clothes_data_list[0])):
+
+    for i in range(len(clothes_data_detail_json)):
         flag = 0
         for j in range(len(clothes_data_detail_json)):
             if clothes_data_list[j][0]==clothes_data_detail_json[i].get("product_size"):
