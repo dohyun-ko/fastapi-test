@@ -9,6 +9,8 @@ def recommend_dog_size(dog_info):
     old = dog_info_json.get("dog_age")
     result = size(breed, weight, old)
 
+    print(breed, weight, old)
+    print(result)
     return {
         "dog_size_chest": result[0]+random.random()-0.5,
         "dog_size_neck": result[1]+random.random()-0.5,
@@ -19,7 +21,7 @@ def recommend_dog_size(dog_info):
 
 def size(breed,weight,old):
 
-    breed_list = ['포메라니안', '말티즈', '푸들(토이)', '골든리트리버', '비숑', '치와와', '시츄', '진돗개', '푸들(미디엄미니어처)']
+    breed_list = ['포메라니안', '말티즈', '푸들(토이)', '골든 리트리버', '비숑', '치와와', '시츄', '진돗개', '푸들 미디엄미니어처']
 
     # 사이즈 분류 (small:0,medium:1,large:2,Giant:3)
     legend_list = [0, 0, 0, 2, 0, 0, 0, 2, 0]
@@ -67,8 +69,10 @@ def size(breed,weight,old):
         return group_size(breed, weight)
 
     else:
+        flag = 1
         for i in range(0 , len(breed_list)):
             if breed == breed_list[i]:
+                flag = 0
                 if old < standard_age[legend_list[i]]:
 
                     # 기준 사이즈 비율 (small=포메(1.934497817,3.572052402),medium,large,Giant)
@@ -112,7 +116,8 @@ def size(breed,weight,old):
                 else:
                     return group_size(breed, weight)
                         #group_size(legend_group[i], weight, neck_ratio[i], leg_ratio[i], back_ratio[i]); #"크기 범위 밖"
-
+            if flag == 1:
+                return group_size(breed, weight)
 def group_size(breed, weight):
         
         prediction_length1 = [0 for _ in range(4)]
